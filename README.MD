@@ -12,7 +12,7 @@ The game can be downloaded [here](https://1drv.ms/u/s!ApRqJhdoSlGBjY1dmYGa8yHyMf
 If you notice that the FPS of the game is too small, you can modify the resolution using the UI from the settings icon in game, which will reduce the graphics for improved performance and FPS.
 By default (unless running on a gaming computer) when launching the rocket, the resolution should be set to LOW for the game to function as intended.
 ### Watching Sample Gameplay
-If the application is inaccessible for various reasons, I have provided videos showcasing the main functionalities below :
+If the application is inaccessible for various reasons, I have provided a video showcasing the main functionalities [here](https://www.youtube.com/watch?v=-ngDfMpZ3Sg "here")
 
 ### Playing from within Unity
 Or if you wish to run the game in the Unity scene, you can download the Unity Hub (if not installed already) and install the 2021.3f version of Unity. Then clone this GitHub repo into the location of the newly created project and open the SampleScene in the scenes folder of the project to load the game scene, then run it.
