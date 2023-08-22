@@ -7,7 +7,7 @@ In this game you can drive 3 amazing cars on a free roam map. You can also launc
 
 ## Gaming Experience
 ### Playing Standalone
-The game can be downloaded here : as an exe application. To run the game, unzip in a folder then launch Gearosphere.exe in the folder where the zip was uncompressed. Then enjoy!
+The game can be downloaded [here](https://1drv.ms/u/s!ApRqJhdoSlGBjY1dmYGa8yHyMfZdYQ?e=EFyhao "here") as a standalone packaged application. To run the game, unzip in a folder then launch Gearosphere.exe in the folder where the zip was uncompressed. Then enjoy!
 
 If you notice that the FPS of the game is too small, you can modify the resolution using the UI from the settings icon in game, which will reduce the graphics for improved performance and FPS.
 By default (unless running on a gaming computer) when launching the rocket, the resolution should be set to LOW for the game to function as intended.
