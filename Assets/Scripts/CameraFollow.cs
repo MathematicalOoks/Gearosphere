@@ -53,12 +53,15 @@ public class CameraFollow : MonoBehaviour
     public float RightBoosterOffset;
 
     public Transform childCamera;
+    public bool waitingForLaunch;
 
     // Start is called before the first frame update
     void Start()
     {
         InitialiseRocket();
         InitialiseCar();
+        // Set the initial atmosphere thickness
+        RenderSettings.skybox.SetFloat("_AtmosphereThickness", 1f);
     }
 
     // Update is called once per frame
@@ -69,8 +72,15 @@ public class CameraFollow : MonoBehaviour
             InitialiseRocket();
             transform.position = startPosition;
         }
+        if (waitingForLaunch || (Input.GetKeyDown(KeyCode.L) && !RocketController.hasLaunched))
+        {
+            transform.position = new Vector3(Rocket.transform.position.x + radius, Rocket.transform.position.y, Rocket.transform.position.z + 35f);
+            transform.LookAt(Rocket.transform);
+            waitingForLaunch = true;
+        }
         if (RocketController.hasLaunched)
         {
+            waitingForLaunch = false;
             childCamera.localPosition = Vector3.zero;
             // Only allows the camera to follow the different objects when the rocket and rocket boosters are separated.
             if (Input.GetKeyDown(KeyCode.V))
@@ -134,7 +144,7 @@ public class CameraFollow : MonoBehaviour
                 }
             }
         }
-        else
+        else if(!waitingForLaunch)
         {
             childCamera.localPosition = localOffset;
             // To change camera position, the key of V is used.
@@ -251,6 +261,8 @@ public class CameraFollow : MonoBehaviour
 
         startPosition = new Vector3(372.2f, 64.1f, 579.8f);
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
+        waitingForLaunch = false;
     }
     void InitialiseCar()
     {
@@ -266,7 +278,7 @@ public class CameraFollow : MonoBehaviour
         rotationSmoothing = 0.15f;
 
         // Offsets holds the different offsets (relative to the vehicle's position) for each camera position.
-        Offsets = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, -0.6f, 5f), new Vector3(1.6f, -0.3f, 2.7f), new Vector3(-1.6f, -0.3f, 2.7f) };
+        Offsets = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, -0.042996f, 5.28988f), new Vector3(1.6f, -0.3f, 2.7f), new Vector3(-1.6f, -0.3f, 2.7f) };
         localOffset = new Vector3(0f, 1.599996f, -5.18988f);
     }
 }

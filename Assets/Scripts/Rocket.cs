@@ -20,6 +20,7 @@ public class Rocket : MonoBehaviour
 
     public bool hasLaunched;
     public bool isLanding;
+    public bool isPayloadReleased;
 
     public AudioSource source;
     public AudioClip clip;
@@ -40,6 +41,7 @@ public class Rocket : MonoBehaviour
         if (Input.GetKey(KeyCode.E))
         {
             // Add wait time for particle system to load
+            StopAllCoroutines();
             TotalReset();
         }
         // To launch the rocket, the key of L is used.
@@ -50,11 +52,8 @@ public class Rocket : MonoBehaviour
             // Activates the rocket's exhaust and launch pad fumes.
             ParticleManager(particleSystem, true);
             ParticleManager(fumeSystem, true);
-            hasLaunched = true;
-            rb.useGravity = true;
+            StartCoroutine(DelayLaunch());
             source.PlayOneShot(clip);
-            // Stops the rocket's fumes that occur during launch.
-            StartCoroutine(StopFumes());
         }
 
         if (hasLaunched && !isLanding)
@@ -77,12 +76,14 @@ public class Rocket : MonoBehaviour
             if ((float)System.Math.Round(localAtmosphere, 2) == 0.01f)
             {
                 payloadCapsule.SetActive(false);
+                isPayloadReleased = true;
                 AtmosphericChange = -0.00001f;
                 if(particleSystem.isPlaying) particleSystem.Stop();
                 isLanding = true;
                 rb.useGravity = false;
             }
         }
+
     }
 
     // Stops the fumes from the rocket at launch.
@@ -90,6 +91,14 @@ public class Rocket : MonoBehaviour
     {
         yield return new WaitForSeconds(4f); // Wait for 4 seconds
         ParticleManager(fumeSystem, false);
+    }
+
+    IEnumerator DelayLaunch()
+    {
+        yield return new WaitForSeconds(10f);
+        hasLaunched = true;
+        rb.useGravity = true;
+        StartCoroutine(StopFumes());
     }
 
     // Resets the rocket and it's components.
@@ -146,6 +155,9 @@ public class Rocket : MonoBehaviour
         AtmosphericChange = 0.0001f;
 
         rb.useGravity = false;
+        hasLaunched = false;
+        isLanding = false;
+        isPayloadReleased = false;
 
         payloadOffset = new Vector3(0, 25, 0);
         startPosition = new Vector3(337.57f, 79.78f, 369.16f);

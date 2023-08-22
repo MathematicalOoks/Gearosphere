@@ -8,6 +8,7 @@ public class CarSpawner : MonoBehaviour
 
     public Vector3 currentPosition;
     public Vector3 startPosition;
+    public Quaternion currentRotation;
 
     // List of the names of car prefabs.
     private string[] cars = {
@@ -27,7 +28,9 @@ public class CarSpawner : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        startPosition = new Vector3(1228.7f, 18.91f, 309f);
+        //startPosition = new Vector3(1228.7f, 18.91f, 309f);
+        startPosition = new Vector3(1234.25f, 20.96155f, 329.61f);
+        currentRotation = Quaternion.Euler(0f, 90f, 0);
         SpawnCar();
     }
 
@@ -50,6 +53,7 @@ public class CarSpawner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             DespawnCar();
+            currentRotation = Quaternion.Euler(0f, 90f, 0f);
             SpawnCar();
             spawnedCar.transform.position = startPosition;
         }
@@ -76,7 +80,7 @@ public class CarSpawner : MonoBehaviour
             if (currentPosition == Vector3.zero) currentPosition = startPosition;
 
             // Instantiate will load the prefab into the scene with a rotation of (0,0,0)
-            spawnedCar = Instantiate(prefab, currentPosition, Quaternion.identity);
+            spawnedCar = Instantiate(prefab, currentPosition, currentRotation);
         }
 
         spawnedCar.SetActive(true);
@@ -88,6 +92,7 @@ public class CarSpawner : MonoBehaviour
         if (spawnedCar != null)
         {
             currentPosition = spawnedCar.transform.position;
+            currentRotation = spawnedCar.transform.rotation;
             spawnedCar.SetActive(false);
         }
     }

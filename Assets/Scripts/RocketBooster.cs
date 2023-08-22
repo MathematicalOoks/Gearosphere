@@ -44,6 +44,7 @@ public class RocketBooster : MonoBehaviour
         // To reset the rocket, the key of E is used.
         if (Input.GetKey(KeyCode.E))
         {
+            StopAllCoroutines();
             TotalReset();
         }
         thrustDir = new Vector3(0, 1, 0).normalized;
@@ -52,8 +53,9 @@ public class RocketBooster : MonoBehaviour
         {
             if (transform.position != startPosition) TotalReset();
             ParticleManager(true);
-            rb.useGravity = true;
-            hasLaunched = true;
+            StartCoroutine(DelayLaunch());
+            //rb.useGravity = true;
+            //hasLaunched = true;
         }
         // Applies an upwards force on the rocket at the position of the nozzle.
         if (hasLaunched && !isLanding)
@@ -131,15 +133,22 @@ public class RocketBooster : MonoBehaviour
 
         UpdateParticleSystem();
 
-        IEnumerator DelayLanding()
-        {
-            yield return new WaitForSeconds(4f); // Wait for 4 seconds
-            AtmosphericChange = -1 * Time.deltaTime * 0.011f;
-            isLanding = true; // Set isLanding to true after the delay
-        }
-
         if (isLanding && localAtmosphere >= 0.99f) { }
         else localAtmosphere -= AtmosphericChange;
+    }
+
+    IEnumerator DelayLanding()
+    {
+        yield return new WaitForSeconds(4f); // Wait for 4 seconds
+        AtmosphericChange = -1 * Time.deltaTime * 0.011f;
+        isLanding = true; // Set isLanding to true after the delay
+    }
+
+    IEnumerator DelayLaunch()
+    {
+        yield return new WaitForSeconds(10f);
+        rb.useGravity = true;
+        hasLaunched = true;
     }
 
     // Updates the particleSystem's position to the nozzle's position with a small offset.

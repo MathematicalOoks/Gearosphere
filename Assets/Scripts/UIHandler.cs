@@ -9,6 +9,7 @@ public class UIHandler : MonoBehaviour
     [SerializeField] TextMeshProUGUI Speedometer;
     [SerializeField] TextMeshProUGUI SpeedText;
     [SerializeField] TextMeshProUGUI AltitudeText;
+    [SerializeField] TextMeshProUGUI PayloadStatus;
 
     CameraFollow followClass;
     Rocket rocketController;
@@ -21,6 +22,7 @@ public class UIHandler : MonoBehaviour
 
     public bool isTelemetryVisible;
     public bool isSpeedometerVisible;
+    public bool isPayloadStatusVisible;
 
     CarSpawner spawnerClass;
     Rigidbody playerRB;
@@ -57,23 +59,33 @@ public class UIHandler : MonoBehaviour
             {
                 isTelemetryVisible = false;
             }
+            if (rocketController.isPayloadReleased && !isPayloadStatusVisible)
+            {
+                PayloadStatus.canvasRenderer.SetAlpha(1.0f);
+                isPayloadStatusVisible = true;
+                StartCoroutine(ClearPayloadStatus());
+            }
         }
         // If the rocket has not launched or the camera is not following the rocket, the telemetry should be invisible.
         else
         {
-            isSpeedometerVisible = true;
-            if (playerRB != null)
+            if (!followClass.waitingForLaunch)
             {
-                // Here we are calculating the magnitude of the velocity of the car only in the x and z directions (as the y direction is not influenced by the motor)
-                // and converting the velocity into mph using the conversion unit.
-                Speedometer.text = (Mathf.Abs(Mathf.Sqrt((float)Math.Pow(playerRB.velocity.x, 2) + (float)Math.Pow(playerRB.velocity.z, 2)) * speedometerConversion)).ToString("0") + " mph";
+                isSpeedometerVisible = true;
+                if (playerRB != null)
+                {
+                    // Here we are calculating the magnitude of the velocity of the car only in the x and z directions (as the y direction is not influenced by the motor)
+                    // and converting the velocity into mph using the conversion unit.
+                    Speedometer.text = (Mathf.Abs(Mathf.Sqrt((float)Math.Pow(playerRB.velocity.x, 2) + (float)Math.Pow(playerRB.velocity.z, 2)) * speedometerConversion)).ToString("0") + " mph";
+                }
+                else
+                {
+                    // If there is a change in car or the car becomes null, we must reset the rigidbody component for the player.
+                    playerRB = spawnerClass.spawnedCar.GetComponent<Rigidbody>();
+                }
+                isTelemetryVisible = false;
             }
-            else
-            {
-                // If there is a change in car or the car becomes null, we must reset the rigidbody component for the player.
-                playerRB = spawnerClass.spawnedCar.GetComponent<Rigidbody>();
-            }
-            isTelemetryVisible = false;
+            else isSpeedometerVisible = false;
         }
 
         // To simulate a rocket launch, the rocket's speed near launch will increase as the rocket travels further upwards
@@ -94,6 +106,13 @@ public class UIHandler : MonoBehaviour
         mphConversion++;
     }
 
+    // Clears payload status after 4 seconds
+    IEnumerator ClearPayloadStatus()
+    {
+        yield return new WaitForSeconds(4f);
+        PayloadStatus.canvasRenderer.SetAlpha(0.0f);
+    }
+
     // Initialises rocket telemetry variables with values from initial scene.
     void InitialiseRocket()
     {
@@ -106,6 +125,9 @@ public class UIHandler : MonoBehaviour
         mphConversion = 0.3f;
         altitudeConversion = 0.001f;
         startingAltitude = rocket.transform.position.y;
+
+        PayloadStatus.canvasRenderer.SetAlpha(0.0f);
+        isPayloadStatusVisible = false;
     }
 
     // Initialises car speedometer variables with values from initial scene.
