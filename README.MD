@@ -29,6 +29,7 @@ When the Unity game is loaded, there will be a settings icon at the top right co
 - R - Reset
 - F - Flip Car
 - P - Park car
+- Keys 1,2,3 - Change car
 
 ##### Rocket Controls
 - L - Launch rocket
