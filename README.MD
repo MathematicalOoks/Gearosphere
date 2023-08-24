@@ -3,7 +3,7 @@
 Hello and welcome to my project! This project is a 3D simulation Unity game, named Gearosphere.
 
 ## Overview
-In this game you can drive 3 amazing cars on a free roam map. You can also launch a SpaceX falcon 9 rocket and watch the rocket head for space while its rocket boosters land themselves back on Earth.
+You wake up one morning and fancy roaming around in your car. But mission control needs you for a top secret project. Head over and find out.
 
 ## Gaming Experience
 ### Playing Standalone
